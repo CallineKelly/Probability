@@ -6,6 +6,7 @@
 package probability.project;
 
 import java.util.List;
+import java.util.Scanner;
 
 /**
  *
@@ -15,16 +16,114 @@ public class ProbabilityProject {
 
     //output of Deck class
     public static void main(String[] args) {
-        Deck deck = new Deck();
-        System.out.println("--- Sample Data: Deck of Cards ---");
-        System.out.print(deck);
+        Deck deck = new Deck(); //create deck of cards
+        //System.out.println("--- Sample Data: Deck of Cards ---");
+        //System.out.print(deck);
+        Scanner scan = new Scanner(System.in);
+        boolean isRunning = true; //control looping of the menu
         
-        calcJointProbability(deck.getCards());
-        // methods EXP: calcMarginalProbability()
+        while (isRunning){
+            try{
+                System.out.println("--- Welcome to Deck Card Probability Calculator! ---");
+                System.out.println("Please choose type of probability calculation:");
+                System.out.println("1. Marginal Probability");
+                System.out.println("2. Joint Probability");
+                System.out.println("3. Conditional Probability");
+                System.out.println("4. Union of Events");
+                System.out.println("5. Check if Events are Disjoint");
+                System.out.println("6. Exit");
+                System.out.print("Your choice (1-6):");
+                int choice = scan.nextInt();
+                scan.nextLine();
+
+                switch(choice){
+                    case 1:
+                        calcMarginalProbability(deck,scan);
+                        break;
+                    case 2:
+                        calcJointProbability(deck,scan);
+                        break;
+                    case 3:
+                        calcConditionalProbability(deck,scan);
+                        break;
+
+                        //add your case here...
+
+                    case 6:
+                        System.out.println("Exiting the program......");
+                        isRunning = false;
+                        break;
+                }
+            }catch(java.util.InputMismatchException e){
+                System.out.println("Invalid input. Please enter a number between 1-6.");
+                scan.nextLine();
+            }    
+        }
+        scan.close();
     }
     
-    private static void calcJointProbability(List<Card> cards){
-        
+    private static void calcMarginalProbability(Deck deck, Scanner scan){
+        try{    
+            System.out.print("Calculate Marginal Probability by Suit(1)or Rank(2):");
+                int choice = scan.nextInt();
+                scan.nextLine();
+
+                if(choice==1){
+                    System.out.print("Enter suit(Heart,Diamond,Club or Spade):");
+                    String suit = scan.nextLine();
+                    int favorable = deck.countFavorableOutcomesBySuit(suit);
+                    int total = deck.getTotalOutcomes();
+                    System.out.printf("Marginal Probability of drawing a %s: %.2f%n", suit,(double)favorable/total); 
+
+                }else if (choice==2){
+                    System.out.print("Enter Rank(Ace,2,3,4,5,6,7,8,9,King,Queen,Jack):");
+                    String rank = scan.nextLine();
+                    int favorable = deck.countFavorableOutcomesByRank(rank);
+                    int total = deck.getTotalOutcomes();
+                    System.out.printf("Marginal Probability of drawing a %s: %.2f%n", rank,(double)favorable/total); 
+
+                }else{
+                    System.out.println("Invalid choice!");
+                }
+        }catch(Exception e){
+            System.out.println("Error occured. Please try again.");
+        }
+    }
+    
+    private static void calcJointProbability(Deck deck, Scanner scan){
+        try{
+            System.out.print("Enter suit(Heart,Diamond,Club or Spade):");
+            String suit = scan.nextLine();
+            System.out.print("Enter Rank(Ace,2,3,4,5,6,7,8,9,King,Queen,Jack):");
+            String rank = scan.nextLine();
+
+            int jointFavorable = deck.countJointOutcomes(suit, rank);
+            int total = deck.getTotalOutcomes();
+            System.out.printf("Joint Probability of drawing a %s of %s: %.2f%n", rank,suit,(double)jointFavorable/total);
+    
+        }catch(Exception e){
+            System.out.println("Error occured. Please try again.");
+        }
+    }
+    private static void calcConditionalProbability(Deck deck, Scanner scan){
+        try{
+            System.out.print("Enter suit(Heart,Diamond,Club or Spade):");
+            String suit = scan.nextLine();
+            System.out.print("Enter Rank(Ace,2,3,4,5,6,7,8,9,King,Queen,Jack):");
+            String rank = scan.nextLine();
+
+            int jointFavorable = deck.countJointOutcomes(suit, rank);
+            int suitFavorable = deck.countFavorableOutcomesBySuit(suit);
+
+            if(suitFavorable == 0){
+                System.out.println("Conditional Probability cannot be calculated because the condition has no outcomes.");
+            }else{
+                System.out.printf("Conditional Probability of drawing a %s given %s: %.2f%n", rank,suit,(double)jointFavorable/suitFavorable);
+            }
+        }catch(Exception e){
+            System.out.println("Error occured. Please try again.");
+        }
     }
 
 }
+
