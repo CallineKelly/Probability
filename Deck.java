@@ -14,7 +14,7 @@ public class Deck {
     //construct deck
     public Deck(){
         cards = new ArrayList<>();
-        String[] suits = {"Hearts","Diamonds","Clubs","Spades"};
+        String[] suits = {"Heart","Diamond","Club","Spade"};
         String[] ranks = {"Ace","2","3","4","5","6","7","8","9","10","Jack","Queen","King"};
         
         for(String suit : suits){
@@ -28,6 +28,29 @@ public class Deck {
     public List<Card> getCards(){
         return cards;
     }
+    
+    //count the number of cards that match with suit (Heart,etc)
+    //stream() use to filter cards that match with specific suit
+    //apply card.getSuit in filter() and filter() will apply in stream()
+    public int countFavorableOutcomesBySuit(String suit){
+        return(int)cards.stream().filter(card -> card.getSuit().equalsIgnoreCase(suit)).count();
+    }
+    
+    public int countFavorableOutcomesByRank(String rank){
+        return(int)cards.stream().filter(card -> card.getRank().equalsIgnoreCase(rank)).count();
+    }
+    
+    public int countJointOutcomes(String suit, String rank){
+        return(int)cards.stream()
+                .filter(card -> card.getSuit().equalsIgnoreCase(suit)
+                        &&card.getRank().equalsIgnoreCase(rank))
+                .count();        
+    }
+    
+    public int getTotalOutcomes(){
+        return cards.size();
+    }
+    
     
     //appends card string from Card class & returns full deck as string
     @Override
