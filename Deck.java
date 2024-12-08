@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 /**
  *
- * @author Neoh
+ * @author Neoh, Varshaa, Tan
  * constructs entire deck and store in ArrayList(Card)
  */
 public class Deck {
