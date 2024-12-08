@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  *
- * @author Neoh
+ * @author Neoh,Tan
  * constructs entire deck and store in ArrayList(Card)
  */
 public class Deck {
