@@ -14,8 +14,8 @@ public class Deck {
     //construct deck
     public Deck(){
         cards = new ArrayList<>();
-        String[] suits = {"Heart","Diamond","Club","Spade"};
-        String[] ranks = {"Ace","2","3","4","5","6","7","8","9","10","Jack","Queen","King"};
+        String[] suits = {"heart","diamond","club","spade"};
+        String[] ranks = {"ace","2","3","4","5","6","7","8","9","10","jack","queen","king"};
         
         for(String suit : suits){
             for(String rank : ranks){
@@ -24,9 +24,26 @@ public class Deck {
         }
     }
     
-    //store in array
-    public List<Card> getCards(){
-        return cards;
+    public boolean isValidCard(String cardString){
+        // Parse the card string into suit and rank
+        String[] parts = cardString.split(" ");
+            if (parts.length != 2) { 
+                return false; // Invalid format
+            }
+
+        String suit = parts[0].toLowerCase();
+        String rank = parts[1].toLowerCase();
+
+        // Create a Card object from the parsed values
+        Card card = new Card(suit, rank);
+
+        // Check if the card exists in the deck
+        return cards.contains(card);
+    }
+
+        //store in array
+        public List<Card> getCards(){
+            return cards;
     }
     
     //count the number of cards that match with suit (Heart,etc)
@@ -51,6 +68,28 @@ public class Deck {
         return cards.size();
     }
     
+    public List<String> parseCards(String input){
+        List<String> cards = new ArrayList<>();
+            String[] cardArray = input.split(","); // Split input into individual cards
+            for (String card : cardArray) {
+                card = card.trim(); // Remove extra spaces
+                if (isValidCard(card)) { // Check if card is valid
+                    cards.add(card); // Add valid card to the list
+                } else {
+                    System.out.println("Invalid card input: " + card); // Warn if invalid
+                }
+            }
+        return cards; // Return the list of valid cards
+    }
+    
+    public boolean areEventsDisjoint(List<String> eventACards, List<String> eventBCards) {
+            for (String cardA : eventACards) { // Loop through each card in Event A
+                if (eventBCards.contains(cardA)) { // Check if Event B contains this card
+                    return false; // If found, events are NOT disjoint
+                }
+            }
+        return true; // No overlap found, events are disjoint
+    }
     
     //appends card string from Card class & returns full deck as string
     @Override
