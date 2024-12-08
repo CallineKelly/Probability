@@ -46,6 +46,9 @@ public class ProbabilityProject {
                     case 3:
                         calcConditionalProbability(deck,scan);
                         break;
+                    case 5:
+                        checkEventsDisjoint(deck,scan);
+                        break;
 
                         //add your case here...
 
@@ -62,8 +65,14 @@ public class ProbabilityProject {
         scan.close();
     }
     
+    //change all input into lower case, centralize input
+    private static String getInput(Scanner scan, String prompt){
+        System.out.print(prompt);
+        return scan.nextLine().trim().toLowerCase();
+    }
+    
     private static void calcMarginalProbability(Deck deck, Scanner scan){
-        try{    
+        /*try{    
             System.out.print("Calculate Marginal Probability by Suit(1)or Rank(2):");
                 int choice = scan.nextInt();
                 scan.nextLine();
@@ -87,8 +96,26 @@ public class ProbabilityProject {
                 }
         }catch(Exception e){
             System.out.println("Error occured. Please try again.");
+        }*/
+        String choice = getInput(scan, "Calculate by Suit(1) or Rank(2): ");
+        if ("1".equals(choice)) {
+            String suit = getInput(scan, "Enter suit (heart, diamond, club, spade): ");
+            calculateProbability(deck.countFavorableOutcomesBySuit(suit), deck.getTotalOutcomes(), "suit", suit);
+        } else if ("2".equals(choice)) {
+            String rank = getInput(scan, "Enter rank (ace, 2, 3, ..., king): ");
+            calculateProbability(deck.countFavorableOutcomesByRank(rank), deck.getTotalOutcomes(), "rank", rank);
+        } else {
+            System.out.println("Invalid choice.");
         }
     }
+    
+    private static void calculateProbability(int favorable, int total, String type, String value) {
+    if (total == 0) {
+        System.out.println("No outcomes available.");
+    } else {
+        System.out.printf("Probability of %s (%s): %.2f%n", type, value, (double) favorable / total);
+    }
+}
     
     private static void calcJointProbability(Deck deck, Scanner scan){
         try{
@@ -122,8 +149,16 @@ public class ProbabilityProject {
             }
         }catch(Exception e){
             System.out.println("Error occured. Please try again.");
+            
         }
+    }
+    
+    private static void checkEventsDisjoint(Deck deck, Scanner scan) {
+        List<String> eventA = deck.parseCards(getInput(scan, "Enter Event A (e.g., heart ace, diamond 2): "));
+        List<String> eventB = deck.parseCards(getInput(scan, "Enter Event B (e.g., diamond 3, club king): "));
+
+        boolean disjoint = deck.areEventsDisjoint(eventA, eventB);
+        System.out.println(disjoint ? "Events are disjoint." : "Events are NOT disjoint.");
     }
 
 }
-
